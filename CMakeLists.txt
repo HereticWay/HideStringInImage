@@ -4,11 +4,17 @@ project(HideStringInImage VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-set(LIBPNG_PATH /usr/include/libpng16/)
+# Set libpng paths
+set(LIBPNG_INCLUDE_PATH /usr/include/libpng16/)
+set(LIBPNG_LIB /usr/lib/libpng16.so)
 
-include_directories(${LIBPNG_PATH})
+set(PROJECT_SRC ${PROJECT_SOURCE_DIR}/src)
 
-add_executable(HideStringInImage ${PROJECT_SOURCE_DIR}/src/main.c)
+# Include thingies
+include_directories(${PROJECT_SRC} ${LIBPNG_PATH})
+
+add_executable(HideStringInImage ${PROJECT_SRC}/main.c ${PROJECT_SRC}/encoder/encoder.c)
+target_link_libraries(HideStringInImage ${LIBPNG_LIB}) # Here we link libpng to our projct
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
