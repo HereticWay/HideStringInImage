@@ -2,6 +2,8 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdint.h>
+#include <stdlib.h>
 #include <memory.h>
 #include "encoder.h"
 
@@ -24,8 +26,15 @@ char* _addSuffixToFileName(const char* fileName, const char *suffix) {
     char *lastDotInFileName = strrchr(fileName, '.');
     if(!lastDotInFileName)
     {
-        strncpy(newFileName, fileName, FILE_NAME_LENGTH);
-        strncpy(newFileName+FILE_NAME_LENGTH, suffix, SUFFIX_LENGTH);
+        // Just copy the suffix to the end of the string
+        strcpy(newFileName, fileName);
+        strcpy(newFileName+FILE_NAME_LENGTH, suffix);
+    } else {
+        // Copy the suffix before the last dot
+        int charsToDot = (intptr_t)lastDotInFileName - (intptr_t)fileName;
+        strncpy(newFileName, fileName, charsToDot);
+        strcpy((newFileName+charsToDot), suffix);
+        strcpy((newFileName+charsToDot+SUFFIX_LENGTH), lastDotInFileName);
     }
 
     return newFileName;
