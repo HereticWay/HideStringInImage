@@ -56,7 +56,7 @@ bool isPng(const char *fileName) {
 }
 
 
-bool encodeInto(const char *fileName, const char *string) {
+bool encodeIntoFile(const char *fileName, const char *string) {
     png_image image;
     image.version = PNG_IMAGE_VERSION;
     image.opaque = NULL;
@@ -80,7 +80,7 @@ bool encodeInto(const char *fileName, const char *string) {
 }
 
 
-const char* decodeFrom(const char *fileName) {
+const char* decodeFromFile(const char *fileName) {
     
     return "";
 }
