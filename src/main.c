@@ -11,5 +11,9 @@ int main(int argc, char**argv) {
 
     encodeIntoFile(FILE_PATH, "fdsadaswqe very fucking hosszu uzenet");
 
+    char *decodedMessage = decodeFromFile("./test_encoded.png");
+    printf("Message: %s\n", decodedMessage);
+    free(decodedMessage);
+
     return 0;
 }

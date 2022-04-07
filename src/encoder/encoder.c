@@ -79,9 +79,8 @@ bool encodeIntoFile(const char *fileName, const char *string) {
         pBuf[2] = (pBuf[2] & ~0x3) | (((*chr) >> 4) & (0x3));
         pBuf[3] = (pBuf[3] & ~0x3) | (((*chr) >> 6) & (0x3));
 
-        if(*chr == 0) {
+        if(*chr == 0)
             break;
-        }
 
         pBuf += 4;
         ++chr;
@@ -98,6 +97,37 @@ bool encodeIntoFile(const char *fileName, const char *string) {
 
 
 const char* decodeFromFile(const char *fileName) {
-    
-    return "";
+    png_image image;
+    image.version = PNG_IMAGE_VERSION;
+    image.opaque = NULL;
+
+    png_image_begin_read_from_file(&image, fileName);
+    image.format = PNG_FORMAT_RGBA;
+
+    const int IMAGE_PIXEL_COUNT = image.height * image.width;
+    const int IMAGE_BUFFER_SIZE = IMAGE_PIXEL_COUNT * 4; // +4 values for every pixel (Because of RGBA)
+    png_bytep imageBuffer = malloc(IMAGE_BUFFER_SIZE);
+    png_image_finish_read(&image, NULL, imageBuffer, 0, NULL);
+
+    const int MSG_BUFFER_SIZE = sizeof(char) * IMAGE_PIXEL_COUNT;
+    char *messageBuffer = malloc(MSG_BUFFER_SIZE);
+    memset(messageBuffer, MSG_BUFFER_SIZE, 0);
+
+    png_bytep pBuf = imageBuffer;
+    char *msgBuf = messageBuffer;
+    for (uint64_t i = 0; i < IMAGE_PIXEL_COUNT; ++i)
+    {
+       (*msgBuf) = (pBuf[0] & 0x3)
+                 | ((pBuf[1] & 0x3) << 2)
+                 | ((pBuf[2] & 0x3) << 4)
+                 | ((pBuf[3] & 0x3) << 6);
+        
+        if(*msgBuf == 0)
+            break;
+
+        ++msgBuf;
+        pBuf += 4;
+    }
+
+    return messageBuffer;
 }
