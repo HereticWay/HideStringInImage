@@ -111,7 +111,7 @@ const char* decodeFromFile(const char *fileName) {
 
     const int MSG_BUFFER_SIZE = sizeof(char) * IMAGE_PIXEL_COUNT;
     char *messageBuffer = malloc(MSG_BUFFER_SIZE);
-    memset(messageBuffer, MSG_BUFFER_SIZE, 0);
+    memset(messageBuffer, 0, MSG_BUFFER_SIZE);
 
     png_bytep pBuf = imageBuffer;
     char *msgBuf = messageBuffer;
