@@ -69,6 +69,7 @@ bool encodeIntoFile(const char *fileName, const char *string) {
     const int IMAGE_BUFFER_SIZE = IMAGE_PIXEL_COUNT * 4; // +4 values for every pixel (Because of RGBA)
     png_bytep imageBuffer = malloc(IMAGE_BUFFER_SIZE);
     png_image_finish_read(&image, NULL, imageBuffer, 0, NULL);
+    // png_image_free(&image); // Not necessary because png_image_finish_read does this automatically
 
     png_bytep pBuf = imageBuffer;
     const char *chr = string;
@@ -88,6 +89,7 @@ bool encodeIntoFile(const char *fileName, const char *string) {
 
     char* newFileName = _addSuffixToFileName(fileName, _FILENAME_SUFFIX);
     png_image_write_to_file(&image, newFileName, 0, imageBuffer, 0, NULL);
+    //png_image_free(&image); // Not necessary because png_image_write_to_file does this automatically
 
     free(newFileName);
     free(imageBuffer);
@@ -108,6 +110,7 @@ const char* decodeFromFile(const char *fileName) {
     const int IMAGE_BUFFER_SIZE = IMAGE_PIXEL_COUNT * 4; // +4 values for every pixel (Because of RGBA)
     png_bytep imageBuffer = malloc(IMAGE_BUFFER_SIZE);
     png_image_finish_read(&image, NULL, imageBuffer, 0, NULL);
+    //png_image_free(&image); // Not necessary because png_image_finish_read does this automatically
 
     const int MSG_BUFFER_SIZE = sizeof(char) * IMAGE_PIXEL_COUNT;
     char *messageBuffer = malloc(MSG_BUFFER_SIZE);
@@ -129,5 +132,6 @@ const char* decodeFromFile(const char *fileName) {
         pBuf += 4;
     }
 
+    free(imageBuffer);
     return messageBuffer;
 }
