@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include "encoder/encoder.h"
 
 
@@ -11,7 +12,7 @@ int main(int argc, char**argv) {
 
     encodeIntoFile(FILE_PATH, "fdsadaswqe very fucking hosszu uzenet");
 
-    char *decodedMessage = decodeFromFile("./test_encoded.png");
+    const char *decodedMessage = decodeFromFile("./test_encoded.png");
     printf("Message: %s\n", decodedMessage);
     free(decodedMessage);
 
