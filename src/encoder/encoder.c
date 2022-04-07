@@ -17,28 +17,23 @@ struct _PngData
 };
 
 
-char* _addSuffixToFileName(const char* fileName, const char *suffix) {
+void addSuffixToFileName(const char* fileName, const char *suffix, char *buffer, const int bufferSize) {
     const int FILE_NAME_LENGTH = strlen(fileName);
     const int SUFFIX_LENGTH = strlen(suffix);
-
-    const int NEW_FILE_NAME_LENGTH = FILE_NAME_LENGTH + SUFFIX_LENGTH;
-    char *newFileName = malloc(sizeof(char) * (NEW_FILE_NAME_LENGTH + 1));
 
     char *lastDotInFileName = strrchr(fileName, '.');
     if(!lastDotInFileName)
     {
         // Just copy the suffix to the end of the string
-        strcpy(newFileName, fileName);
-        strcpy(newFileName+FILE_NAME_LENGTH, suffix);
+        strncpy(buffer, fileName, bufferSize);
+        strncpy((buffer+FILE_NAME_LENGTH), suffix, (bufferSize-FILE_NAME_LENGTH));
     } else {
         // Copy the suffix before the last dot
-        int charsToDot = (intptr_t)lastDotInFileName - (intptr_t)fileName;
-        strncpy(newFileName, fileName, charsToDot);
-        strcpy((newFileName+charsToDot), suffix);
-        strcpy((newFileName+charsToDot+SUFFIX_LENGTH), lastDotInFileName);
+        const int CHARS_TO_DOT = (intptr_t)lastDotInFileName - (intptr_t)fileName;
+        strncpy(buffer, fileName, CHARS_TO_DOT);
+        strncpy((buffer+CHARS_TO_DOT), suffix, (bufferSize-CHARS_TO_DOT));
+        strncpy((buffer+CHARS_TO_DOT+SUFFIX_LENGTH), lastDotInFileName, (bufferSize-CHARS_TO_DOT-SUFFIX_LENGTH));
     }
-
-    return newFileName;
 }
 
 
@@ -87,7 +82,12 @@ bool encodeIntoFile(const char *fileName, const char *string) {
         ++chr;
     }
 
-    char* newFileName = _addSuffixToFileName(fileName, _FILENAME_SUFFIX);
+    const int FILE_NAME_LENGTH = strlen(fileName);
+    const int SUFFIX_LENGTH = strlen(_FILENAME_SUFFIX);
+    const int NEW_FILE_NAME_LENGTH = (FILE_NAME_LENGTH+SUFFIX_LENGTH+1);
+    char* newFileName = malloc(sizeof(char) * NEW_FILE_NAME_LENGTH);
+    addSuffixToFileName(fileName, _FILENAME_SUFFIX, newFileName, NEW_FILE_NAME_LENGTH);
+    
     png_image_write_to_file(&image, newFileName, 0, imageBuffer, 0, NULL);
     //png_image_free(&image); // Not necessary because png_image_write_to_file does this automatically
 
