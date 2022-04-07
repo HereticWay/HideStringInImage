@@ -10,12 +10,6 @@
 
 const char* _FILENAME_SUFFIX = "_encoded";
 
-struct _PngData
-{
-    png_structp png_p;
-    png_infop info_p;
-};
-
 
 void addSuffixToFileName(const char* fileName, const char *suffix, char *buffer, const int bufferSize) {
     const int FILE_NAME_LENGTH = strlen(fileName);
@@ -87,7 +81,7 @@ bool encodeIntoFile(const char *fileName, const char *string) {
     const int NEW_FILE_NAME_LENGTH = (FILE_NAME_LENGTH+SUFFIX_LENGTH+1);
     char* newFileName = malloc(sizeof(char) * NEW_FILE_NAME_LENGTH);
     addSuffixToFileName(fileName, _FILENAME_SUFFIX, newFileName, NEW_FILE_NAME_LENGTH);
-    
+
     png_image_write_to_file(&image, newFileName, 0, imageBuffer, 0, NULL);
     //png_image_free(&image); // Not necessary because png_image_write_to_file does this automatically
 
