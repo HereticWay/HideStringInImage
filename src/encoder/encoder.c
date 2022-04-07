@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <memory.h>
+#include <zlib.h>
 #include "encoder.h"
 
 const char* _FILENAME_SUFFIX = "_encoded";
@@ -62,13 +63,29 @@ bool encodeIntoFile(const char *fileName, const char *string) {
     image.opaque = NULL;
 
     png_image_begin_read_from_file(&image, fileName);
-    image.format = PNG_FORMAT_ARGB;
+    image.format = PNG_FORMAT_RGBA;
 
-    const int IMAGE_BUFFER_SIZE = image.height * image.width * 4;
+    const int IMAGE_PIXEL_COUNT = image.height * image.width;
+    const int IMAGE_BUFFER_SIZE = IMAGE_PIXEL_COUNT * 4; // +4 values for every pixel (Because of RGBA)
     png_bytep imageBuffer = malloc(IMAGE_BUFFER_SIZE);
     png_image_finish_read(&image, NULL, imageBuffer, 0, NULL);
 
-    //TODO: manipulate image here!
+    png_bytep pBuf = imageBuffer;
+    const char *chr = string;
+    for (uint64_t i = 0; i < IMAGE_PIXEL_COUNT; ++i)
+    {
+        pBuf[0] = (pBuf[0] & ~0x3) | ((*chr) & 0x3);
+        pBuf[1] = (pBuf[1] & ~0x3) | (((*chr) >> 2) & (0x3));
+        pBuf[2] = (pBuf[2] & ~0x3) | (((*chr) >> 4) & (0x3));
+        pBuf[3] = (pBuf[3] & ~0x3) | (((*chr) >> 6) & (0x3));
+
+        if(*chr == 0) {
+            break;
+        }
+
+        pBuf += 4;
+        ++chr;
+    }
 
     char* newFileName = _addSuffixToFileName(fileName, _FILENAME_SUFFIX);
     png_image_write_to_file(&image, newFileName, 0, imageBuffer, 0, NULL);
