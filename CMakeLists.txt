@@ -13,8 +13,8 @@ set(PROJECT_SRC ${PROJECT_SOURCE_DIR}/src)
 # Include thingies
 include_directories(${PROJECT_SRC} ${LIBPNG_PATH})
 
-add_executable(HideStringInImage ${PROJECT_SRC}/main.c ${PROJECT_SRC}/encoder/encoder.c)
-target_link_libraries(HideStringInImage ${LIBPNG_LIB}) # Here we link libpng to our projct
+add_executable(HideStringInImage ${PROJECT_SRC}/main.c ${PROJECT_SRC}/message_hider/message_hider.c)
+target_link_libraries(HideStringInImage ${LIBPNG_LIB}) # Here we link libpng to our project
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

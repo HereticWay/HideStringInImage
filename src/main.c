@@ -1,18 +1,20 @@
 #include <stdio.h>
-#include <errno.h>
-#include <stdbool.h>
-#include <string.h>
 #include <stdlib.h>
-#include "encoder/encoder.h"
+#include "message_hider/message_hider.h"
 
 
-int main(int argc, char**argv) {
-    const char* FILE_PATH = "./test.png";
-    printf("The provided file %s a png.\n", isPng(FILE_PATH) ? "IS" : "IS NOT");
+int main(int argc, char **argv)
+{
+    const char *FILE_PATH = "./test.png";
+    if(!isPng(FILE_PATH))
+    {
+        printf("The provided file is not a png!\n");
+        return 1;
+    }
 
-    encodeIntoFile(FILE_PATH, "fdsadaswqe very fucking hosszu uzenet");
+    codeMessageIntoImage(FILE_PATH, "Test message hidden in a png image.");
 
-    const char *decodedMessage = decodeFromFile("./test_encoded.png");
+    char *decodedMessage = decodeMessageFromImage("./test_with_hidden_msg.png");
     printf("Message: %s\n", decodedMessage);
     free(decodedMessage);
 
