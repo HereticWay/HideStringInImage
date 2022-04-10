@@ -1,5 +1,16 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "png.h": "c",
+        "future": "c",
+        "system_error": "c",
+        "*.inc": "c",
+        "*.rh": "c",
+        "encoder.h": "c",
+        "memory.h": "c",
+        "stdint.h": "c",
+        "stdbool.h": "c",
+        "errno.h": "c",
+        "stdlib.h": "c"
     }
 }
