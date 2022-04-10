@@ -108,14 +108,14 @@ char *decodeMessageFromImage(const char *fileName)
     //png_image_free(&image); // Not necessary because png_image_finish_read does this automatically
 
     const uint64_t messageBufferSize = sizeof(char) * imagePixelCount;
-    unsigned char *messageBuffer = malloc(messageBufferSize);
+    char *messageBuffer = malloc(messageBufferSize);
     memset(messageBuffer, 0, messageBufferSize);
 
     png_bytep imgBuf = imageBuffer;
-    unsigned char *msgBuf = messageBuffer;
+    char *msgBuf = messageBuffer;
     for (uint64_t i = 0; i < imagePixelCount; ++i)
     {
-        (*msgBuf) = (imgBuf[0] & 0x3)
+        (*msgBuf) = (imgBuf[0] & 0x3) // NOLINT(cppcoreguidelines-narrowing-conversions) // This is intentional
                     | ((imgBuf[1] & 0x3) << 2)
                     | ((imgBuf[2] & 0x3) << 4)
                     | ((imgBuf[3] & 0x3) << 6);
