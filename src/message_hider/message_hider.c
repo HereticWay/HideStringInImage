@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <png.h>
 #include "message_hider.h"
+#include "errors.h"
 
 #define FILENAME_SUFFIX "_with_hidden_msg"
 
@@ -40,7 +41,7 @@ bool isPng(const char *fileName)
     FILE *file = fopen(fileName, "rb");
     if (file == NULL)
     {
-        perror("An error occurred while opening the file");
+        ERROR_TO_LOG("An error occurred while opening the file!\n");
         return false;
     }
 
