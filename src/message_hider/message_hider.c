@@ -23,7 +23,8 @@ char *addSuffixToFileName(const char *fileName, const char *suffix)
         // Just copy the suffix to the end of the string
         strcpy(buffer, fileName);
         strcpy((buffer + fileNameLength), suffix);
-    } else
+    }
+    else
     {
         // Copy the suffix before the last dot
         const unsigned int charsCountToFirstDot = lastDotInFileName - fileName;
