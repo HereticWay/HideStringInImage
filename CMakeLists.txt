@@ -6,38 +6,27 @@ project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 #include(CTest)
 #enable_testing()
 
+set(zlib "${PROJECT_SOURCE_DIR}/lib/zlib")
+set(libpng "${PROJECT_SOURCE_DIR}/lib/libpng")
 set(PROJECT_SRC "${PROJECT_SOURCE_DIR}/src")
 
-
-set(zlib lib/zlib)
-file(GLOB
-        zlib_files
-        "${zlib}/**.c")
-add_library(zlib ${zlib_files})
-
-
-set(libpng lib/libpng)
-file(GLOB
-        libpng_files
-        "${libpng}/**.c")
-add_library(libpng ${libpng_files})
-
+add_subdirectory(${zlib})
+set(PNG_STATIC ON)
+add_subdirectory(${libpng})
 
 file(GLOB
         source_files
-        "${PROJECT_SRC}/**.c")
+        "${PROJECT_SRC}/*.c"
+        "${PROJECT_SRC}/message_hider/*.c")
 add_executable(${PROJECT_NAME} ${source_files})
-
-target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-        zlib
-        libpng)
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC
+        "${PROJECT_SRC}"
         "${zlib}"
         "${libpng}")
 
+target_link_libraries(${PROJECT_NAME} zlibstatic png_static)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
