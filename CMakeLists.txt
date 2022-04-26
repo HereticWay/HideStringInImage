@@ -9,12 +9,17 @@ project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 set(zlib "${PROJECT_SOURCE_DIR}/lib/zlib")
 set(libpng "${PROJECT_SOURCE_DIR}/lib/libpng")
 set(PROJECT_SRC "${PROJECT_SOURCE_DIR}/src")
-set(ZLIB_LIBRARY "${zlib}")
-set(ZLIB_INCLUDE_DIR "${zlib}")
 
-set(PNG_STATIC ON)
-add_subdirectory(${libpng})
 add_subdirectory(${zlib})
+
+set(PNG_SHARED      OFF CACHE BOOL "force disable libpng shared libraries"  FORCE)
+set(PNG_EXECUTABLES OFF CACHE BOOL "force disable libpng executables"       FORCE)
+set(PNG_TESTS       OFF CACHE BOOL "force disable libpng tests"             FORCE)
+set(PNG_STATIC      ON  CACHE BOOL "force enable libpng static libraries"   FORCE)
+set(PNG_BUILD_ZLIB  ON  CACHE BOOL "force zlib build mode"                  FORCE)
+#set(ZLIB_LIBRARY "${zlib}")
+#set(ZLIB_INCLUDE_DIR "${zlib}")
+add_subdirectory(${libpng})
 
 file(GLOB
         source_files
