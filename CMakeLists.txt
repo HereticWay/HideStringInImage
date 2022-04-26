@@ -9,10 +9,12 @@ project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 set(zlib "${PROJECT_SOURCE_DIR}/lib/zlib")
 set(libpng "${PROJECT_SOURCE_DIR}/lib/libpng")
 set(PROJECT_SRC "${PROJECT_SOURCE_DIR}/src")
+set(ZLIB_LIBRARY "${zlib}")
+set(ZLIB_INCLUDE_DIR "${zlib}")
 
-add_subdirectory(${zlib})
 set(PNG_STATIC ON)
 add_subdirectory(${libpng})
+add_subdirectory(${zlib})
 
 file(GLOB
         source_files
@@ -26,7 +28,7 @@ target_include_directories(${PROJECT_NAME}
         "${zlib}"
         "${libpng}")
 
-target_link_libraries(${PROJECT_NAME} zlibstatic png_static)
+target_link_libraries(${PROJECT_NAME} png_static zlibstatic)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
