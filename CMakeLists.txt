@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.0.0)
-set(PROJECT_NAME "HideStringInImage")
-set(PROJECT_VERSION "0.1.0")
-project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
+project(
+	"HideStringInImage"
+	VERSION "0.1.0"
+	LANGUAGES C
+)
 
 #include(CTest)
 #enable_testing()
@@ -10,16 +12,20 @@ set(zlib "${PROJECT_SOURCE_DIR}/lib/zlib")
 set(libpng "${PROJECT_SOURCE_DIR}/lib/libpng")
 set(PROJECT_SRC "${PROJECT_SOURCE_DIR}/src")
 
-add_subdirectory(${zlib})
 
-set(PNG_SHARED      OFF CACHE BOOL "force disable libpng shared libraries"  FORCE)
-set(PNG_EXECUTABLES OFF CACHE BOOL "force disable libpng executables"       FORCE)
-set(PNG_TESTS       OFF CACHE BOOL "force disable libpng tests"             FORCE)
-set(PNG_STATIC      ON  CACHE BOOL "force enable libpng static libraries"   FORCE)
-set(PNG_BUILD_ZLIB  ON  CACHE BOOL "force zlib build mode"                  FORCE)
+add_subdirectory(${zlib} EXCLUDE_FROM_ALL)
+
+
+set(PNG_SHARED       OFF CACHE BOOL "disable libpng shared libraries"  FORCE)
+set(PNG_EXECUTABLES  OFF CACHE BOOL "disable libpng executables"       FORCE)
+set(PNG_TESTS        OFF CACHE BOOL "disable libpng tests"             FORCE)
+set(PNG_STATIC       ON  CACHE BOOL "enable libpng static libraries"   FORCE)
+set(PNG_BUILD_ZLIB   ON  CACHE BOOL "zlib is built by ourselves"       FORCE)
+set(SKIP_INSTALL_ALL ON  CACHE BOOL "skip libpng install"              FORCE)
 #set(ZLIB_LIBRARY "${zlib}")
 #set(ZLIB_INCLUDE_DIR "${zlib}")
-add_subdirectory(${libpng})
+add_subdirectory(${libpng} EXCLUDE_FROM_ALL)
+
 
 file(GLOB
         source_files
