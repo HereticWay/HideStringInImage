@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <zlib.h>
 #include <png.h>
 #include "message_hider.h"
 #include "errors.h"
